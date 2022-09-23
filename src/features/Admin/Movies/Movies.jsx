@@ -1,19 +1,9 @@
-import { Content } from 'antd/lib/layout/layout'
-import React from 'react'
-import Admin from '..'
+import { Content } from "antd/lib/layout/layout";
+import React from "react";
+import Admin from "..";
 
 const Movies = () => {
-  return (
-        <Admin>
-             <Content key={2}>
-          <div>Movies</div>
-          </Content>
-        </Admin>
-         
-           
-      
-   
-  )
-}
+  return <div>Movies</div>;
+};
 
-export default Movies
+export default Movies;

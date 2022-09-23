@@ -5,6 +5,8 @@ import {
   Route,
   useRouteMatch,
   useHistory,
+  useLocation
+  
 } from "react-router-dom";
 
 import { useEffect, useState } from "react";
@@ -17,9 +19,9 @@ function App() {
     <div>
       <Router>
         <Switch>
-          <Route path={"/"} exact component={Admin} />
-          <Route path={"/movies"} exact component={Movies} />
-          <Route path={"/users"} exact component={User} />
+          <Route path={"/"} component={Admin}></Route>
+          {/* <Route path={"/movies"} exact component={Movies} />
+          <Route path={"/users"} exact component={User} /> */}
         </Switch>
       </Router>
     </div>

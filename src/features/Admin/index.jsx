@@ -8,6 +8,9 @@ import {
 import { Breadcrumb, Layout, Menu } from "antd";
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import Movies from "./Movies/Movies";
+import User from "./User/User";
+import "./admin.scss";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -20,14 +23,18 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem(<NavLink  to="/">Admin </NavLink>, "1", <DesktopOutlined />),
-  getItem(<NavLink  to="/movies">Movies </NavLink>, "2", <DesktopOutlined />),
-  getItem(<NavLink  to="/users">Users </NavLink>, "3", <PieChartOutlined />),
+  getItem("Users", "1", <UserOutlined />),
+  getItem("Movies", "2", <DesktopOutlined />),
 ];
 
 const Admin = (props) => {
+  const [componetns, setComponents] = useState(<User />);
   const [collapsed, setCollapsed] = useState(false);
-  console.log(collapsed);
+  const onclick = (e) => {
+    if (e.key === "1") setComponents(<User />);
+    if (e.key === "2") setComponents(<Movies />);
+  };
+
   return (
     <Layout
       style={{
@@ -35,15 +42,16 @@ const Admin = (props) => {
       }}
     >
       <Sider
+        className="sider"
         collapsible
         collapsed={collapsed}
-        
         onCollapse={(value) => setCollapsed(value)}
       >
         <div className="logo" />
         <Menu
+          onClick={onclick}
           theme="dark"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={["1"]}
           mode="inline"
           items={items}
         />
@@ -60,14 +68,6 @@ const Admin = (props) => {
             margin: "0 16px",
           }}
         >
-          <Breadcrumb
-            style={{
-              margin: "16px 0",
-            }}
-          >
-            <Breadcrumb.Item>Movies</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
           <div
             className="site-layout-background"
             style={{
@@ -75,7 +75,7 @@ const Admin = (props) => {
               minHeight: 360,
             }}
           >
-            {props.children}
+            {componetns}
           </div>
         </Content>
         <Footer

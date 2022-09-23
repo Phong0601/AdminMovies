@@ -4,11 +4,9 @@ import Admin from "..";
 
 const User = () => {
   return (
-    <Admin>
-      <Content key={1}>
-        <div>User</div>
-      </Content>
-    </Admin>
+    <div>
+      Users
+    </div>
   );
 };
 
