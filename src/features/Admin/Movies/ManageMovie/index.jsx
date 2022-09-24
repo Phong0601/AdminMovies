@@ -6,11 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMovieListAction } from "features/Admin/utils/adminAction";
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useHistory } from "react-router";
 
 const { Search } = Input;
 
 function ManageMovie() {
 	const dispatch = useDispatch();
+
+	const history = useHistory();
 
 	const fetchMovieList = () => {
 		dispatch(fetchMovieListAction());
@@ -24,6 +27,10 @@ function ManageMovie() {
 		fetchMovieList();
 	}, []);
 
+	const goToEditMovie = (id) => {
+		history.push("/movie/edit/" + id);
+	};
+
 	const columns = [
 		{
 			title: "Mã phim",
@@ -31,7 +38,7 @@ function ManageMovie() {
 			key: "maPhim",
 			width: "10%",
 			sorter: (a, b) => a.maPhim - b.maPhim,
-			sortDirections: ["descend", "ascend"],
+			sortDirections: ["descend"],
 		},
 		{
 			title: "Hình ảnh",
@@ -104,7 +111,10 @@ function ManageMovie() {
 			render: (text, film) => {
 				return (
 					<Fragment>
-						<NavLink style={{ marginRight: 20 }} to="/">
+						<NavLink
+							style={{ marginRight: 20 }}
+							to={"/movies/edit/" + film.maPhim}
+						>
 							<EditOutlined
 								style={{ fontSize: 25 }}
 								title="Chỉnh sửa"

@@ -13,6 +13,7 @@ import User from "./User/User";
 import "./admin.scss";
 import ManageMovie from "./Movies/ManageMovie";
 import AddMovie from "./Movies/AddMovie";
+import EditMovie from "./Movies/EditMovie";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -75,9 +76,14 @@ const Admin = (props) => {
 				>
 					<Routes>
 						<Route path="/users" element={<User />} />
+						<Route path="/" element={<Movies />} />
 						<Route
 							path="/movies/manage"
 							element={<ManageMovie />}
+						/>
+						<Route
+							path="/movies/edit/:id"
+							element={<EditMovie />}
 						/>
 						<Route path="/movies/add" element={<AddMovie />} />
 					</Routes>

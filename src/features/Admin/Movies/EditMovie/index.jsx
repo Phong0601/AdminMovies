@@ -16,8 +16,13 @@ import React, { useState } from "react";
 import moment from "moment";
 import { min } from "lodash";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { createMovieAction } from "features/Admin/utils/adminAction";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	createMovieAction,
+	fetchMovieDetailAction,
+} from "features/Admin/utils/adminAction";
+import { useLocation, useRouteMatch } from "react-router-dom";
+import moment from "moment";
 
 const schema = yup.object({
 	tenPhim: yup.string().required("*Bạn chưa nhập tên phim !"),
@@ -26,22 +31,39 @@ const schema = yup.object({
 	ngayKhoiChieu: yup.string().required("*Bạn chưa chọn ngày khởi chiếu !"),
 });
 
-function AddMovie() {
+function EditMovie() {
 	const [img, setImg] = useState("");
 	const dispatch = useDispatch();
 
+	const match = useLocation();
+	const index = match.pathname.lastIndexOf("/");
+	const movieId = match.pathname.slice(index + 1, match.pathname.length);
+	// console.log(movieId);
+
+	const fetchMovieDetail = () => {
+		dispatch(fetchMovieDetailAction(movieId));
+	};
+
+	useEffect(() => {
+		fetchMovieDetail();
+	}, []);
+
+	const movieDetail = useSelector((state) => state.admin.movieDetail);
+
 	// Validation Form
 	const formik = useFormik({
+		enableReinitialize: true,
 		initialValues: {
-			tenPhim: "",
-			trailer: "",
-			moTa: "",
-			ngayKhoiChieu: "",
-			dangChieu: false,
-			sapChieu: false,
-			hot: false,
-			danhGia: 0,
-			hinhAnh: {},
+			tenPhim: movieDetail?.tenPhim,
+			trailer: movieDetail?.trailer,
+			moTa: movieDetail?.moTa,
+			ngayKhoiChieu: movieDetail?.ngayKhoiChieu,
+			dangChieu: movieDetail?.dangChieu,
+			sapChieu: movieDetail?.sapChieu,
+			hot: movieDetail?.hot,
+			danhGia: movieDetail?.danhGia,
+			hinhAnh: null,
+			maNhom: "GP03",
 		},
 		onSubmit: (values) => {
 			// console.log(values);
@@ -62,10 +84,9 @@ function AddMovie() {
 			}
 			// get hinhAnh
 			// console.log(formData.get("File").name);
-			// console.log(formData.get("danhGia"));
 
 			// 2) Call api
-			dispatch(createMovieAction(formData));
+			dispatch();
 		},
 
 		// validationSchema: schema,
@@ -128,7 +149,7 @@ function AddMovie() {
 				onValuesChange={onFormLayoutChange}
 				size={componentSize}
 			>
-				<h3>Thêm phim mới</h3>
+				<h1>Chỉnh sửa phim</h1>
 				<Form.Item label="Kích cỡ form" name="size">
 					<Radio.Group>
 						<Radio.Button value="small">Nhỏ</Radio.Button>
@@ -141,6 +162,7 @@ function AddMovie() {
 						name="tenPhim"
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						value={formik.values.tenPhim}
 					/>
 
 					{formik.touched.tenPhim && formik.errors.tenPhim && (
@@ -154,6 +176,7 @@ function AddMovie() {
 						name="trailer"
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						value={formik.values.trailer}
 					/>
 					{formik.touched.trailer && formik.errors.trailer && (
 						<p style={{ color: "red", margin: 0 }}>
@@ -167,6 +190,7 @@ function AddMovie() {
 						name="moTa"
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
+						value={formik.values.moTa}
 					/>
 					{formik.touched.moTa && formik.errors.moTa && (
 						<p style={{ color: "red", margin: 0 }}>
@@ -181,7 +205,9 @@ function AddMovie() {
 						format={"DD/MM/YYYY"}
 						onChange={handleChangeDatePicker}
 						onBlur={formik.handleBlur}
+						value={moment(formik.values.ngayKhoiChieu)}
 					/>
+
 					{formik.touched.ngayKhoiChieu &&
 						formik.errors.ngayKhoiChieu && (
 							<p style={{ color: "red", margin: 0 }}>
@@ -191,15 +217,24 @@ function AddMovie() {
 				</Form.Item>
 
 				<Form.Item label="Đang chiếu" valuePropName="checked">
-					<Switch onChange={handleChangeSwitch("dangChieu")} />
+					<Switch
+						onChange={handleChangeSwitch("dangChieu")}
+						checked={formik.values.dangChieu}
+					/>
 				</Form.Item>
 
 				<Form.Item label="Sắp chiếu" valuePropName="checked">
-					<Switch onChange={handleChangeSwitch("sapChieu")} />
+					<Switch
+						onChange={handleChangeSwitch("sapChieu")}
+						checked={formik.values.sapChieu}
+					/>
 				</Form.Item>
 
 				<Form.Item label="Hot" valuePropName="checked">
-					<Switch onChange={handleChangeSwitch("hot")} />
+					<Switch
+						onChange={handleChangeSwitch("hot")}
+						checked={formik.values.hot}
+					/>
 				</Form.Item>
 
 				<Form.Item label="Số sao">
@@ -207,6 +242,7 @@ function AddMovie() {
 						onChange={handleChangeInputNumber("danhGia")}
 						min={1}
 						max={10}
+						value={formik.values.danhGia}
 					/>
 				</Form.Item>
 
@@ -215,17 +251,17 @@ function AddMovie() {
 
 					<img
 						style={{ width: 100, height: 140, objectFit: "cover" }}
-						src={img}
+						src={img === "" ? movieDetail?.hinhAnh : img}
 						alt="..."
 					/>
 				</Form.Item>
 
 				<Form.Item label="Tác vụ">
-					<button type="submit">Thêm phim</button>
+					<button type="submit">Cập nhật</button>
 				</Form.Item>
 			</Form>
 		</div>
 	);
 }
 
-export default AddMovie;
+export default EditMovie;

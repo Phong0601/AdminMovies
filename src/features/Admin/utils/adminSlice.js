@@ -1,8 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMovieListAction } from "features/Admin/utils/adminAction";
+import {
+	fetchMovieDetailAction,
+	fetchMovieListAction,
+} from "features/Admin/utils/adminAction";
 
 const initialState = {
 	movieList: null,
+	movieDetail: null,
 };
 
 const adminSlice = createSlice({
@@ -13,6 +17,11 @@ const adminSlice = createSlice({
 		// Movie list
 		builder.addCase(fetchMovieListAction.fulfilled, (state, action) => {
 			state.movieList = action.payload;
+		});
+
+		// Movie detail (to edit)
+		builder.addCase(fetchMovieDetailAction.fulfilled, (state, action) => {
+			state.movieDetail = action.payload;
 		});
 	},
 });
