@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu } from "antd";
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Movies from "./Movies/Movies";
 import User from "./User/User";
 import "./admin.scss";
@@ -23,17 +23,15 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem("Users", "1", <UserOutlined />),
-  getItem("Movies", "2", <DesktopOutlined />),
+  getItem("Movies", "/movies", <DesktopOutlined />),
+  getItem("User", "/users", <UserOutlined />),
 ];
 
 const Admin = (props) => {
-  const [componetns, setComponents] = useState(<User />);
+  const location = useLocation();
+
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
-  const onclick = (e) => {
-    if (e.key === "1") setComponents(<User />);
-    if (e.key === "2") setComponents(<Movies />);
-  };
 
   return (
     <Layout
@@ -49,9 +47,11 @@ const Admin = (props) => {
       >
         <div className="logo" />
         <Menu
-          onClick={onclick}
+          onClick={({ key }) => {
+            navigate(key);
+          }}
           theme="dark"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={["/"]}
           mode="inline"
           items={items}
         />
@@ -68,15 +68,17 @@ const Admin = (props) => {
             margin: "0 16px",
           }}
         >
+          <Routes>
+            <Route path="/users" element={<User />} />
+            <Route path="/movies" element={<Movies />} />
+          </Routes>
           <div
             className="site-layout-background"
             style={{
               padding: 24,
               minHeight: 360,
             }}
-          >
-            {componetns}
-          </div>
+          ></div>
         </Content>
         <Footer
           style={{
