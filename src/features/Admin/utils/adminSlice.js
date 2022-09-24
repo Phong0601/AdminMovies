@@ -1,18 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {} from 'features/Admin/utils/adminAction'
+import { fetchMovieListAction } from "features/Admin/utils/adminAction";
+
+const initialState = {
+	movieList: null,
+};
+
 const adminSlice = createSlice({
 	name: "admin",
-	initialState: {
-		
-	},
+	initialState: initialState,
 	reducers: {},
 	extraReducers: (builder) => {
-		// Demo
-		// builder.addCase(fetchMovieListAction.fulfilled, (state, action) => {
-		// 	state.movieList = action.payload;
-		// });
-
-	
+		// Movie list
+		builder.addCase(fetchMovieListAction.fulfilled, (state, action) => {
+			state.movieList = action.payload;
+		});
 	},
 });
 export default adminSlice;
