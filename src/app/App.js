@@ -9,10 +9,25 @@ import ManageMovie from "features/Admin/Movies/ManageMovie";
 import AddMovie from "features/Admin/Movies/AddMovie";
 import EditMovie from "features/Admin/Movies/EditMovie";
 import SignIn from "features/Authentication/SignIn/SignIn";
+import instance from "api/instance";
 
 function App() {
 	const [getUser,setGetUser]= useState(null);
-	
+	const fetchUser = async()=>{
+		try {
+			const res = await instance.request({
+				url:'/api/QuanLyNguoiDung/ThongTinTaiKhoan',
+				method:'POST'
+			})
+			delete res.data.content.accessToken;	
+			setGetUser(res.data.content)
+		} catch (error) {
+			
+		}
+	}
+	useEffect(()=>{
+		fetchUser()
+	},[])
 	return (
 		<div>
 			<Router>

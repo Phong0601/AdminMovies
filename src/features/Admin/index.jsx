@@ -4,6 +4,7 @@ import {
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
+  LoginOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, Spin } from "antd";
 import React, { useEffect, useState } from "react";
@@ -32,6 +33,7 @@ const items = [
     getItem("Add movie", "/movies/add"),
   ]),
   getItem("User", "/users", <UserOutlined />),
+  getItem("Đăng Xuất", "/signin", <LoginOutlined />),
 ];
 //123@admin
 //123123
@@ -40,7 +42,7 @@ const Admin = (props) => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [users, setUsers] = useState(null);
-	
+  const login = props.getUser;
   const fetchUsers = async () => {
     try {
       const res = await instance.request({
@@ -48,15 +50,15 @@ const Admin = (props) => {
         method: "GET",
         MaNhom: "GP00",
       });
-	  setUsers(res.data.content)
+      setUsers(res.data.content);
     } catch (error) {}
   };
-  
-useEffect(()=>{
-	// localStorage.setItem('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoicGhvbmcwNjAxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoicGhvbmcwNjAxQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJRdWFuVHJpIiwicGhvbmcwNjAxQGdtYWlsLmNvbSIsIkdQMDAiXSwibmJmIjoxNjY0MTEzMDA1LCJleHAiOjE2NjQxMTY2MDV9.QgRTTMD7nJRo8TT8eR_aXdv-THGMiIStEXsJWjpQxoI')
-	fetchUsers()
-},[])
-if (!users) return <Spin></Spin>
+
+  useEffect(() => {
+    // localStorage.setItem('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoicGhvbmcwNjAxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoicGhvbmcwNjAxQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJRdWFuVHJpIiwicGhvbmcwNjAxQGdtYWlsLmNvbSIsIkdQMDAiXSwibmJmIjoxNjY0MTEzMDA1LCJleHAiOjE2NjQxMTY2MDV9.QgRTTMD7nJRo8TT8eR_aXdv-THGMiIStEXsJWjpQxoI')
+    fetchUsers();
+  }, []);
+  if (!users) return <Spin></Spin>;
   return (
     <Layout
       style={{
@@ -69,10 +71,19 @@ if (!users) return <Spin></Spin>
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
-        <div className="logo" />
+        <div style={{display:'inline-block'}} className="logo">
+          {login ? (
+            <h1 style={{ color: "#fff" }}>
+              Hi <UserOutlined /> , {login?.taiKhoan}
+            </h1>
+          ) : null}
+        </div>
         <Menu
           onClick={({ key }) => {
             navigate(key);
+            if (key === "/signin") {
+              localStorage.removeItem("token");
+            }
           }}
           theme="dark"
           defaultSelectedKeys={["/"]}
