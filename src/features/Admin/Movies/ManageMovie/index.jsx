@@ -3,7 +3,10 @@ import { Button, Table } from "antd";
 import { AudioOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Input, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMovieListAction } from "features/Admin/utils/adminAction";
+import {
+	fetchMovieListAction,
+	removeMovieAction,
+} from "features/Admin/utils/adminAction";
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useHistory } from "react-router";
@@ -25,10 +28,12 @@ function ManageMovie() {
 
 	useEffect(() => {
 		fetchMovieList();
-	}, []);
+	}, [movieList]);
 
-	const goToEditMovie = (id) => {
-		history.push("/movie/edit/" + id);
+	const removeMovie = (film) => {
+		if (window.confirm("Bạn có muốn xóa phim " + film.tenPhim)) {
+			dispatch(removeMovieAction(film.maPhim));
+		}
 	};
 
 	const columns = [
@@ -120,23 +125,28 @@ function ManageMovie() {
 								title="Chỉnh sửa"
 							/>
 						</NavLink>
-						<NavLink to="/">
+						<span
+							style={{ cursor: "pointer" }}
+							onClick={() => removeMovie(film)}
+						>
 							<DeleteOutlined
 								style={{ fontSize: 25, color: "red" }}
 								title="Xóa"
 							/>
-						</NavLink>
+						</span>
 					</Fragment>
 				);
 			},
 		},
 	];
-
+	// data for table
 	const data = movieList;
 
 	return (
 		<div className="EditMovie">
-			<h3 className="title">Danh sách phim</h3>
+			<h1 className="title" style={{ fontSize: 20 }}>
+				Danh sách phim
+			</h1>
 
 			<Search
 				placeholder="Tìm kiếm..."
@@ -146,7 +156,8 @@ function ManageMovie() {
 				// }}
 				onChange={(e) => setSearchText(e.target.value.toString())}
 				style={{
-					width: 200,
+					width: 400,
+					marginBottom: 20,
 				}}
 			/>
 			<Table columns={columns} dataSource={data} rowKey="maPhim" />

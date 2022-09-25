@@ -7,28 +7,28 @@ import {
 	InputNumber,
 	Radio,
 	Select,
+	Spin,
 	Switch,
 	TreeSelect,
 } from "antd";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import React, { useState } from "react";
-import moment from "moment";
-import { min } from "lodash";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	createMovieAction,
 	fetchMovieDetailAction,
+	updateMovieAction,
 } from "features/Admin/utils/adminAction";
 import { useLocation, useRouteMatch } from "react-router-dom";
 import moment from "moment";
+import { useHistory } from "react-router";
 
 const schema = yup.object({
 	tenPhim: yup.string().required("*Bạn chưa nhập tên phim !"),
 	trailer: yup.string().required("*Bạn chưa nhập trailer !"),
 	moTa: yup.string().required("*Bạn chưa nhập mô tả !"),
-	ngayKhoiChieu: yup.string().required("*Bạn chưa chọn ngày khởi chiếu !"),
 });
 
 function EditMovie() {
@@ -40,12 +40,22 @@ function EditMovie() {
 	const movieId = match.pathname.slice(index + 1, match.pathname.length);
 	// console.log(movieId);
 
+	// get movie to fill form
 	const fetchMovieDetail = () => {
 		dispatch(fetchMovieDetailAction(movieId));
 	};
 
+	// token Admin
+	const setToken = () => {
+		localStorage.setItem(
+			"token",
+			"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWJjMTIzIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoia2hhbmg2NjZAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjpbIlF1YW5UcmkiLCJraGFuaDY2NkBnbWFpbC5jb20iLCJHUDAxIl0sIm5iZiI6MTY2NDA5MzU1NCwiZXhwIjoxNjY0MDk3MTU0fQ.QpWBnFcK9d0YGqMzRzz7bP62QZWKu0lOIhEVLyx4_S8"
+		);
+	};
+
 	useEffect(() => {
 		fetchMovieDetail();
+		setToken();
 	}, []);
 
 	const movieDetail = useSelector((state) => state.admin.movieDetail);
@@ -54,39 +64,41 @@ function EditMovie() {
 	const formik = useFormik({
 		enableReinitialize: true,
 		initialValues: {
+			maPhim: movieDetail?.maPhim,
 			tenPhim: movieDetail?.tenPhim,
 			trailer: movieDetail?.trailer,
 			moTa: movieDetail?.moTa,
-			ngayKhoiChieu: movieDetail?.ngayKhoiChieu,
 			dangChieu: movieDetail?.dangChieu,
 			sapChieu: movieDetail?.sapChieu,
 			hot: movieDetail?.hot,
 			danhGia: movieDetail?.danhGia,
+			ngayKhoiChieu: movieDetail?.ngayKhoiChieu,
 			hinhAnh: null,
-			maNhom: "GP03",
 		},
 		onSubmit: (values) => {
-			// console.log(values);
+			console.log(values);
 			values.maNhom = "GP03";
-			// 1) Create formData object
+			// // 1) Create formData object
 			let formData = new FormData();
 			for (let key in values) {
 				if (key !== "hinhAnh") {
 					formData.append(key, values[key]);
 				} else {
 					// formData.append("custom name", object file, file name )
-					formData.append(
-						"File",
-						values.hinhAnh,
-						values.hinhAnh.name
-					);
+					if (values.hinhAnh !== null) {
+						formData.append(
+							"File",
+							values.hinhAnh,
+							values.hinhAnh.name
+						);
+					}
 				}
 			}
 			// get hinhAnh
 			// console.log(formData.get("File").name);
 
 			// 2) Call api
-			dispatch();
+			dispatch(updateMovieAction(formData));
 		},
 
 		// validationSchema: schema,
@@ -99,9 +111,8 @@ function EditMovie() {
 	};
 
 	const handleChangeDatePicker = (value) => {
-		let date = moment(value).format("DD/MM/YYYY");
+		let date = moment(value);
 		formik.setFieldValue("ngayKhoiChieu", date);
-		// formik.handleChange();
 	};
 
 	const handleChangeSwitch = (name) => {
@@ -112,7 +123,7 @@ function EditMovie() {
 		return (value) => formik.setFieldValue(name, value);
 	};
 
-	const handleChangeFile = (e) => {
+	const handleChangeFile = async (e) => {
 		//1) get file from e
 		let file = e.target.files[0];
 		//2) create object to read file
@@ -122,15 +133,23 @@ function EditMovie() {
 			file.type === "image/gif" ||
 			file.type === "image/png"
 		) {
+			// Save file data to formik. Notice: setFieldValue is async func
+			await formik.setFieldValue("hinhAnh", file);
 			let reader = new FileReader();
 			reader.readAsDataURL(file);
 			reader.onload = (e) => {
 				setImg(e.target.result);
 			};
-
-			formik.setFieldValue("hinhAnh", file);
 		}
 	};
+
+	if (!movieDetail) {
+		return (
+			<div>
+				<Spin size="large" />
+			</div>
+		);
+	}
 
 	return (
 		<div>
@@ -201,10 +220,8 @@ function EditMovie() {
 
 				<Form.Item label="Ngày khởi chiếu">
 					<DatePicker
-						name="ngayKhoiChieu"
-						format={"DD/MM/YYYY"}
 						onChange={handleChangeDatePicker}
-						onBlur={formik.handleBlur}
+						format={"DD/MM/YYYY"}
 						value={moment(formik.values.ngayKhoiChieu)}
 					/>
 
@@ -247,7 +264,11 @@ function EditMovie() {
 				</Form.Item>
 
 				<Form.Item label="Hình ảnh">
-					<input type="file" onChange={handleChangeFile} />
+					<input
+						type="file"
+						onChange={handleChangeFile}
+						style={{ marginBottom: 20 }}
+					/>
 
 					<img
 						style={{ width: 100, height: 140, objectFit: "cover" }}
@@ -256,8 +277,10 @@ function EditMovie() {
 					/>
 				</Form.Item>
 
-				<Form.Item label="Tác vụ">
-					<button type="submit">Cập nhật</button>
+				<Form.Item label="Hành động">
+					<button type="submit" style={{ cursor: "pointer" }}>
+						Cập nhật
+					</button>
 				</Form.Item>
 			</Form>
 		</div>

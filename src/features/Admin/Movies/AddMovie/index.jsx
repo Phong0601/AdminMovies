@@ -18,6 +18,7 @@ import { min } from "lodash";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { createMovieAction } from "features/Admin/utils/adminAction";
+import { useHistory } from "react-router";
 
 const schema = yup.object({
 	tenPhim: yup.string().required("*Bạn chưa nhập tên phim !"),
@@ -29,6 +30,7 @@ const schema = yup.object({
 function AddMovie() {
 	const [img, setImg] = useState("");
 	const dispatch = useDispatch();
+	const history = useHistory();
 
 	// Validation Form
 	const formik = useFormik({
@@ -44,7 +46,6 @@ function AddMovie() {
 			hinhAnh: {},
 		},
 		onSubmit: (values) => {
-			// console.log(values);
 			values.maNhom = "GP03";
 			// 1) Create formData object
 			let formData = new FormData();
@@ -63,16 +64,17 @@ function AddMovie() {
 			// get hinhAnh
 			// console.log(formData.get("File").name);
 			// console.log(formData.get("danhGia"));
-
 			// 2) Call api
 			dispatch(createMovieAction(formData));
 		},
 
-		// validationSchema: schema,
+		validationSchema: schema,
 	});
 
 	// setting form antd
 	const [componentSize, setComponentSize] = useState("default");
+
+	// setting value for form
 	const onFormLayoutChange = ({ size }) => {
 		setComponentSize(size);
 	};
@@ -80,7 +82,6 @@ function AddMovie() {
 	const handleChangeDatePicker = (value) => {
 		let date = moment(value).format("DD/MM/YYYY");
 		formik.setFieldValue("ngayKhoiChieu", date);
-		// formik.handleChange();
 	};
 
 	const handleChangeSwitch = (name) => {
@@ -96,8 +97,8 @@ function AddMovie() {
 		let file = e.target.files[0];
 		//2) create object to read file
 		if (
-			file.type === "image/jpeg" ||
 			file.type === "image/jpg" ||
+			file.type === "image/jpeg" ||
 			file.type === "image/gif" ||
 			file.type === "image/png"
 		) {
@@ -128,7 +129,9 @@ function AddMovie() {
 				onValuesChange={onFormLayoutChange}
 				size={componentSize}
 			>
-				<h3>Thêm phim mới</h3>
+				<h1 style={{ fontSize: 20, marginLeft: 50, marginBottom: 30 }}>
+					Thêm phim mới
+				</h1>
 				<Form.Item label="Kích cỡ form" name="size">
 					<Radio.Group>
 						<Radio.Button value="small">Nhỏ</Radio.Button>
@@ -211,7 +214,12 @@ function AddMovie() {
 				</Form.Item>
 
 				<Form.Item label="Hình ảnh">
-					<input type="file" onChange={handleChangeFile} />
+					<input
+						type="file"
+						onChange={handleChangeFile}
+						accept="image/png, image/jpeg,  image/jpg, image/gif"
+						style={{ marginBottom: 20 }}
+					/>
 
 					<img
 						style={{ width: 100, height: 140, objectFit: "cover" }}
@@ -220,8 +228,10 @@ function AddMovie() {
 					/>
 				</Form.Item>
 
-				<Form.Item label="Tác vụ">
-					<button type="submit">Thêm phim</button>
+				<Form.Item label="Hành động">
+					<button type="submit" style={{ cursor: "pointer" }}>
+						Thêm phim
+					</button>
 				</Form.Item>
 			</Form>
 		</div>

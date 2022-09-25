@@ -14,18 +14,18 @@ function App() {
 		<div>
 			<Router>
 				<Routes>
-					<Route path="/" element={<Admin />}>
-						<Route path="/users" element={<User />} />
-						<Route path="/" element={<Movies />} />
+					<Route path="/*" element={<Admin />}>
+						<Route path="/*users" element={<User />} />
+						<Route path="/*" element={<Movies />} />
 						<Route
-							path="/movies/manage"
+							path="/*movies/manage"
 							element={<ManageMovie />}
 						/>
 						<Route
-							path="/movies/edit/:id"
+							path="/*movies/edit/:id"
 							element={<EditMovie />}
 						/>
-						<Route path="/movies/add" element={<AddMovie />} />
+						<Route path="/*movies/add" element={<AddMovie />} />
 					</Route>
 				</Routes>
 			</Router>

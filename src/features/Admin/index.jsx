@@ -6,6 +6,7 @@ import {
 	UserOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu } from "antd";
+import logo from "../../assets/img/icon/logo-sonic.png";
 import React, { useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Movies from "./Movies/Movies";
@@ -14,6 +15,7 @@ import "./admin.scss";
 import ManageMovie from "./Movies/ManageMovie";
 import AddMovie from "./Movies/AddMovie";
 import EditMovie from "./Movies/EditMovie";
+import { useHistory } from "react-router";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -51,7 +53,9 @@ const Admin = (props) => {
 				collapsed={collapsed}
 				onCollapse={(value) => setCollapsed(value)}
 			>
-				<div className="logo" />
+				<div className="logo">
+					<img src={logo} alt="" />
+				</div>
 				<Menu
 					onClick={({ key }) => {
 						navigate(key);
