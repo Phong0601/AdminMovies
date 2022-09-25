@@ -8,13 +8,17 @@ import User from "features/Admin/User/User";
 import ManageMovie from "features/Admin/Movies/ManageMovie";
 import AddMovie from "features/Admin/Movies/AddMovie";
 import EditMovie from "features/Admin/Movies/EditMovie";
+import SignIn from "features/Authentication/SignIn/SignIn";
 
 function App() {
+	const [getUser,setGetUser]= useState(null);
+	
 	return (
 		<div>
 			<Router>
 				<Routes>
-					<Route path="/*" element={<Admin />}>
+					<Route path="/signin" element={<SignIn setGetUser={setGetUser}/>}/>
+					<Route path="/" element={<Admin getUser={getUser}  />}>
 						<Route path="/*users" element={<User />} />
 						<Route path="/*" element={<Movies />} />
 						<Route

@@ -301,7 +301,7 @@ const User = ({ users }) => {
       editable: true,
     },
     {
-      title: "operation",
+      title: "Chức Năng",
       dataIndex: "operation",
       render: (_, record) => {
         const editable = isEditing(record);
@@ -331,6 +331,7 @@ const User = ({ users }) => {
               Edit
             </Typography.Link>
             <Popconfirm
+              
               title="Sure to Delete?"
               onConfirm={() => {
                 deleteUsers(record);
