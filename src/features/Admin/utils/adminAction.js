@@ -26,18 +26,17 @@ export const createMovieAction = createAsyncThunk(
 	"admin/createMovie",
 	async (formData) => {
 		try {
-			console.log(formData.get("File"));
 			const res = await instance.request({
 				url: "/api/QuanLyPhim/ThemPhimUploadHinh",
 				method: "POST",
-				body: formData,
+				data: formData,
 			});
-
-			alert("thanh cong");
-			console.log(res.data.content);
+			alert("Thêm phim thành công !");
+			// console.log(res.data.content);
 			return res.data.content;
 		} catch (err) {
-			console.log(err);
+			alert("Không thành công: " + err.response.data.content);
+			console.log(err.response.data.content);
 		}
 	}
 );
@@ -63,5 +62,40 @@ export const fetchMovieDetailAction = createAsyncThunk(
 	}
 );
 
+// Update movie
+export const updateMovieAction = createAsyncThunk(
+	"admin/updateMovie",
+	async (formData) => {
+		try {
+			const res = await instance.request({
+				url: "/api/QuanLyPhim/CapNhatPhimUpload",
+				method: "POST",
+				data: formData,
+			});
+			alert("Cập nhật phim thành công!");
+		} catch (err) {
+			alert("Không thành công: " + err.response.data.content);
+			console.log(err);
+		}
+	}
+);
 
-//get users 
+// remove movie
+export const removeMovieAction = createAsyncThunk(
+	"admin/removeMovie",
+	async (movieId) => {
+		try {
+			const res = await instance.request({
+				url: "/api/QuanLyPhim/XoaPhim",
+				method: "DELETE",
+				params: {
+					maPhim: movieId,
+				},
+			});
+			alert("Xóa phim thành công!");
+		} catch (err) {
+			alert("Không thành công: " + err.response.data.content);
+			console.log(err);
+		}
+	}
+);

@@ -1,13 +1,17 @@
 .logo {
-  height: 32px;
-  margin: 16px;
-  background: rgba(255, 255, 255, 0.2);
+	height: 80px;
+	margin: 16px;
+	border-bottom: 1px solid rgb(136, 136, 136);
+	img {
+		width: 80%;
+		height: 80%;
+	}
 }
 
 .site-layout-sub-header-background {
-  background: #fff;
+	background: #fff;
 }
 
 .site-layout-background {
-  background: #fff;
+	background: #fff;
 }

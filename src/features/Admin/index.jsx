@@ -5,8 +5,14 @@ import {
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+<<<<<<< HEAD
 import { Breadcrumb, Layout, Menu, Spin } from "antd";
 import React, { useEffect, useState } from "react";
+=======
+import { Breadcrumb, Layout, Menu } from "antd";
+import logo from "../../assets/img/icon/logo-sonic.png";
+import React, { useState } from "react";
+>>>>>>> 1eccd6752d2ca2b60ea7bd9e54be9aa283cf6ff1
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Movies from "./Movies/Movies";
 import User from "./User/User";
@@ -14,7 +20,11 @@ import "./admin.scss";
 import ManageMovie from "./Movies/ManageMovie";
 import AddMovie from "./Movies/AddMovie";
 import EditMovie from "./Movies/EditMovie";
+<<<<<<< HEAD
 import instance from "api/instance";
+=======
+import { useHistory } from "react-router";
+>>>>>>> 1eccd6752d2ca2b60ea7bd9e54be9aa283cf6ff1
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -53,7 +63,7 @@ const Admin = (props) => {
   };
   
 useEffect(()=>{
-	localStorage.setItem('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoicGhvbmcwNjAxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoicGhvbmcwNjAxQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJRdWFuVHJpIiwicGhvbmcwNjAxQGdtYWlsLmNvbSIsIkdQMDAiXSwibmJmIjoxNjY0MTEzMDA1LCJleHAiOjE2NjQxMTY2MDV9.QgRTTMD7nJRo8TT8eR_aXdv-THGMiIStEXsJWjpQxoI')
+	// localStorage.setItem('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoicGhvbmcwNjAxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoicGhvbmcwNjAxQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJRdWFuVHJpIiwicGhvbmcwNjAxQGdtYWlsLmNvbSIsIkdQMDAiXSwibmJmIjoxNjY0MTEzMDA1LCJleHAiOjE2NjQxMTY2MDV9.QgRTTMD7nJRo8TT8eR_aXdv-THGMiIStEXsJWjpQxoI')
 	fetchUsers()
 },[])
 if (!users) return <Spin></Spin>
