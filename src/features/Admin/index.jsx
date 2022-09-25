@@ -5,14 +5,8 @@ import {
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-<<<<<<< HEAD
 import { Breadcrumb, Layout, Menu, Spin } from "antd";
 import React, { useEffect, useState } from "react";
-=======
-import { Breadcrumb, Layout, Menu } from "antd";
-import logo from "../../assets/img/icon/logo-sonic.png";
-import React, { useState } from "react";
->>>>>>> 1eccd6752d2ca2b60ea7bd9e54be9aa283cf6ff1
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Movies from "./Movies/Movies";
 import User from "./User/User";
@@ -20,11 +14,7 @@ import "./admin.scss";
 import ManageMovie from "./Movies/ManageMovie";
 import AddMovie from "./Movies/AddMovie";
 import EditMovie from "./Movies/EditMovie";
-<<<<<<< HEAD
 import instance from "api/instance";
-=======
-import { useHistory } from "react-router";
->>>>>>> 1eccd6752d2ca2b60ea7bd9e54be9aa283cf6ff1
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
