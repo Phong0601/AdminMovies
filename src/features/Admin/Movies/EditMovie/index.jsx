@@ -22,7 +22,7 @@ import {
 	fetchMovieDetailAction,
 } from "features/Admin/utils/adminAction";
 import { useLocation, useRouteMatch } from "react-router-dom";
-import moment from "moment";
+
 
 const schema = yup.object({
 	tenPhim: yup.string().required("*Bạn chưa nhập tên phim !"),
