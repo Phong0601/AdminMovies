@@ -74,7 +74,18 @@ export const updateMovieAction = createAsyncThunk(
 			});
 			alert("Cập nhật phim thành công!");
 		} catch (err) {
-			alert("Không thành công: " + err.response.data.content);
+			if (err.response.status === 401) {
+				alert("Không thành công ! Vui lòng đăng nhập! ");
+			}
+			if (err.response.status === 500) {
+				alert(
+					"Không thành công ! " +
+						err.response.data.message +
+						" : " +
+						err.response.data.content
+				);
+			}
+
 			console.log(err);
 		}
 	}
@@ -95,6 +106,61 @@ export const removeMovieAction = createAsyncThunk(
 			alert("Xóa phim thành công!");
 		} catch (err) {
 			alert("Không thành công: " + err.response.data.content);
+			console.log(err);
+		}
+	}
+);
+
+// Get cinemas group (LayThongTinHeThongRap)
+export const fetchCinemasGroupAction = createAsyncThunk(
+	"admin/fetchCinemasGroup",
+	async () => {
+		try {
+			const res = await instance.request({
+				url: "/api/QuanLyRap/LayThongTinHeThongRap",
+				method: "GET",
+			});
+			// console.log(res.data.content);
+			return res.data.content;
+		} catch (err) {
+			console.log(err);
+		}
+	}
+);
+
+// Get cinemas (LayThongTinCumRapTheoHeThong)
+export const fetchCinemasAction = createAsyncThunk(
+	"admin/fetchCinemas",
+	async (cinemasId) => {
+		try {
+			const res = await instance.request({
+				url: "/api/QuanLyRap/LayThongTinCumRapTheoHeThong",
+				method: "GET",
+				params: {
+					maHeThongRap: cinemasId,
+				},
+			});
+			// console.log(res.data.content);
+			return res.data.content;
+		} catch (err) {
+			console.log(err);
+		}
+	}
+);
+
+// Create movie schedule
+export const createMovieScheduleAction = createAsyncThunk(
+	"admin/createMovieSchedule",
+	async (movieSchedule) => {
+		try {
+			const res = await instance.request({
+				url: "/api/QuanLyDatVe/TaoLichChieu",
+				method: "POST",
+				data: movieSchedule,
+			});
+
+			// console.log(res.data.content);
+		} catch (err) {
 			console.log(err);
 		}
 	}

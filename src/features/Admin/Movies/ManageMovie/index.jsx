@@ -1,6 +1,11 @@
 import React, { Fragment, useState } from "react";
 import { Button, Table } from "antd";
-import { AudioOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+	AudioOutlined,
+	CalendarOutlined,
+	DeleteOutlined,
+	EditOutlined,
+} from "@ant-design/icons";
 import { Input, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -134,6 +139,15 @@ function ManageMovie() {
 								title="Xóa"
 							/>
 						</span>
+						<NavLink
+							style={{ marginLeft: 20 }}
+							to={"/movies/showtime/" + film.maPhim}
+						>
+							<CalendarOutlined
+								style={{ fontSize: 25 }}
+								title="Thêm lịch chiếu"
+							/>
+						</NavLink>
 					</Fragment>
 				);
 			},

@@ -10,30 +10,32 @@ import AddMovie from "features/Admin/Movies/AddMovie";
 import EditMovie from "features/Admin/Movies/EditMovie";
 import SignIn from "features/Authentication/SignIn/SignIn";
 import instance from "api/instance";
+import ShowTime from "features/Admin/Movies/ShowTime";
 
 function App() {
-	const [getUser,setGetUser]= useState(null);
-	const fetchUser = async()=>{
+	const [getUser, setGetUser] = useState(null);
+	const fetchUser = async () => {
 		try {
 			const res = await instance.request({
-				url:'/api/QuanLyNguoiDung/ThongTinTaiKhoan',
-				method:'POST'
-			})
-			delete res.data.content.accessToken;	
-			setGetUser(res.data.content)
-		} catch (error) {
-			
-		}
-	}
-	useEffect(()=>{
-		fetchUser()
-	},[])
+				url: "/api/QuanLyNguoiDung/ThongTinTaiKhoan",
+				method: "POST",
+			});
+			delete res.data.content.accessToken;
+			setGetUser(res.data.content);
+		} catch (error) {}
+	};
+	useEffect(() => {
+		fetchUser();
+	}, []);
 	return (
 		<div>
 			<Router>
 				<Routes>
-					<Route path="/signin" element={<SignIn setGetUser={setGetUser}/>}/>
-					<Route path="/" element={<Admin getUser={getUser}  />}>
+					<Route
+						path="/signin"
+						element={<SignIn setGetUser={setGetUser} />}
+					/>
+					<Route path="/*" element={<Admin getUser={getUser} />}>
 						<Route path="/*users" element={<User />} />
 						<Route path="/*" element={<Movies />} />
 						<Route
@@ -43,6 +45,10 @@ function App() {
 						<Route
 							path="/*movies/edit/:id"
 							element={<EditMovie />}
+						/>
+						<Route
+							path="/*movies/showtime/:id"
+							element={<ShowTime />}
 						/>
 						<Route path="/*movies/add" element={<AddMovie />} />
 					</Route>

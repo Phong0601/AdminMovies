@@ -7,6 +7,7 @@ import {
 const initialState = {
 	movieList: null,
 	movieDetail: null,
+	cinemasGroup: null,
 };
 
 const adminSlice = createSlice({

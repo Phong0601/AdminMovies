@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { createMovieAction } from "features/Admin/utils/adminAction";
 import { useHistory } from "react-router";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const schema = yup.object({
 	tenPhim: yup.string().required("*Bạn chưa nhập tên phim !"),
@@ -30,7 +31,8 @@ const schema = yup.object({
 function AddMovie() {
 	const [img, setImg] = useState("");
 	const dispatch = useDispatch();
-	const history = useHistory();
+
+	const navigate = useNavigate();
 
 	// Validation Form
 	const formik = useFormik({
@@ -66,6 +68,7 @@ function AddMovie() {
 			// console.log(formData.get("danhGia"));
 			// 2) Call api
 			dispatch(createMovieAction(formData));
+			setTimeout(navigate("/movies/manage"), 2000);
 		},
 
 		validationSchema: schema,
@@ -229,8 +232,23 @@ function AddMovie() {
 				</Form.Item>
 
 				<Form.Item label="Hành động">
-					<button type="submit" style={{ cursor: "pointer" }}>
+					<button
+						type="submit"
+						style={{
+							cursor: "pointer",
+							background: "#3498db",
+							border: "none",
+							padding: "5px 10px",
+							color: "#fff",
+						}}
+					>
 						Thêm phim
+					</button>
+					<button
+						style={{ marginLeft: 20, cursor: "pointer" }}
+						onClick={() => navigate("/movies/manage")}
+					>
+						Trở về
 					</button>
 				</Form.Item>
 			</Form>
