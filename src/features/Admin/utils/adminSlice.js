@@ -2,12 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
 	fetchMovieDetailAction,
 	fetchMovieListAction,
+	fetchUsersListAction,
 } from "features/Admin/utils/adminAction";
 
 const initialState = {
 	movieList: null,
 	movieDetail: null,
 	cinemasGroup: null,
+	usersList:null
 };
 
 const adminSlice = createSlice({
@@ -24,6 +26,11 @@ const adminSlice = createSlice({
 		builder.addCase(fetchMovieDetailAction.fulfilled, (state, action) => {
 			state.movieDetail = action.payload;
 		});
+		// Users List
+		builder.addCase(fetchUsersListAction.fulfilled,(state,action)=>{
+			
+			state.usersList= action.payload
+		})
 	},
 });
 export default adminSlice;

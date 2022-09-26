@@ -7,6 +7,7 @@ import {
   Typography,
   Button,
   Space,
+  Spin,
 } from "antd";
 import instance from "api/instance";
 import React, { useEffect, useState, useRef } from "react";
@@ -15,6 +16,9 @@ import { SearchOutlined, UserAddOutlined } from "@ant-design/icons";
 
 import Highlighter from "react-highlight-words";
 import { useNavigate } from "react-router-dom";
+import { fetchUsersListAction } from "../utils/adminAction";
+import { useDispatch, useSelector } from "react-redux";
+import useSelection from "antd/lib/table/hooks/useSelection";
 
 const originData = [];
 
@@ -54,14 +58,18 @@ const EditableCell = ({
 };
 
 const User = ({ users,fetchUsers }) => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState("");
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+  const usersList = useSelector(state=>state.admin.usersList)
   const navigate= useNavigate()
-  users.map((user, index) => {
+
+  
+  usersList?.map((user, index) => {
     originData.push({ ...user, key: index });
   });
 
@@ -251,7 +259,13 @@ const User = ({ users,fetchUsers }) => {
       console.log("Validate Failed:", errInfo);
     }
   };
-
+  const fetchUsersAction = ()=>{
+    dispatch(fetchUsersListAction())
+  } 
+  useEffect (()=>{
+    fetchUsersAction()
+  },[])
+  if(!usersList) return <Spin></Spin>
   const columns = [
     {
       title: "Tài Khoản",
@@ -365,9 +379,9 @@ const User = ({ users,fetchUsers }) => {
       }),
     };
   });
-  useEffect(()=>{
-    fetchUsers()
-  },[])
+  // useEffect(()=>{
+  //   // fetchUsers()
+  // },[])
   return (
     <>
     <Button onClick={()=>{navigate('/signup')}} className="btn-add"> <UserAddOutlined />Thêm Người Dùng</Button>

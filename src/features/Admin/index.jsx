@@ -19,6 +19,7 @@ import EditMovie from "./Movies/EditMovie";
 import instance from "api/instance";
 
 import SignUp from "features/Authentication/SignUp/SignUp";
+import { fetchUsersListAction } from "./utils/adminAction";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -46,22 +47,23 @@ const Admin = (props) => {
 	const [collapsed, setCollapsed] = useState(false);
 	const [users, setUsers] = useState(null);
 	const login = props.getUser;
-	const fetchUsers = async () => {
-		try {
-			const res = await instance.request({
-				url: "/api/QuanLyNguoiDung/LayDanhSachNguoiDung",
-				method: "GET",
-				MaNhom: "GP01",
-			});
-			setUsers(res.data.content);
-			console.log(res.data.content);
-		} catch (error) {}
-	};
+	// const fetchUsers = async () => {
+	// 	try {
+	// 		const res = await instance.request({
+	// 			url: "/api/QuanLyNguoiDung/LayDanhSachNguoiDung",
+	// 			method: "GET",
+	// 			MaNhom: "GP01",
+	// 		});
+	// 		setUsers(res.data.content);
+			
+	// 	} catch (error) {}
+	// };
 
-	useEffect(() => {
-		fetchUsers();
-	}, []);
-	if (!users) return <Spin></Spin>;
+	// useEffect(() => {
+		
+	// 	// fetchUsers();
+	// }, []);
+	// if (!users) return <Spin></Spin>;
 	return (
 		<Layout
 			style={{
@@ -118,8 +120,8 @@ const Admin = (props) => {
 								path="/users"
 								element={
 									<User
-										fetchUsers={fetchUsers}
-										users={users}
+										// fetchUsers={fetchUsers}
+										// users={users}
 									/>
 								}
 							/>
@@ -135,7 +137,9 @@ const Admin = (props) => {
 							<Route path="/movies/add" element={<AddMovie />} />
 							<Route
 								path="/signup"
-								element={<SignUp fetchUsers={fetchUsers} />}
+								element={<SignUp 
+									// fetchUsers={fetchUsers} 
+									/>}
 							></Route>
 						</Routes>
 					</div>
