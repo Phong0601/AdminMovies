@@ -5,6 +5,7 @@ import {
 	TeamOutlined,
 	UserOutlined,
 	LoginOutlined,
+	UserSwitchOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, Spin } from "antd";
 import React, { useEffect, useState } from "react";
@@ -79,7 +80,7 @@ const Admin = (props) => {
 						<h1 style={{ color: "#fff" }}>
 							Hi <UserOutlined /> , {login?.taiKhoan}
 						</h1>
-					) : null}
+					) : <h1 onClick={navigate('/signin')} style={{color: "#fff",display:'inline-block',cursor:'pointer'}}><UserSwitchOutlined  />Đăng Nhập <br/> Bé Ơi</h1>}
 				</div>
 				<Menu
 					onClick={({ key }) => {
