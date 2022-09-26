@@ -11,9 +11,10 @@ import {
 import instance from "api/instance";
 import React, { useEffect, useState, useRef } from "react";
 import "./users.scss";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, UserAddOutlined } from "@ant-design/icons";
 
 import Highlighter from "react-highlight-words";
+import { useNavigate } from "react-router-dom";
 
 const originData = [];
 
@@ -52,13 +53,14 @@ const EditableCell = ({
   );
 };
 
-const User = ({ users }) => {
+const User = ({ users,fetchUsers }) => {
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState("");
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+  const navigate= useNavigate()
   users.map((user, index) => {
     originData.push({ ...user, key: index });
   });
@@ -171,6 +173,7 @@ const User = ({ users }) => {
 
   //call api Edit User
   const postEdit = async (user) => {
+    
     try {
       const res = await instance.request({
         url: "/api/QuanLyNguoiDung/CapNhatThongTinNguoiDung",
@@ -185,12 +188,13 @@ const User = ({ users }) => {
   };
   //call api Delete User
   const deleteUsers = async (user) => {
+    console.log(users);
     try {
       const res = await instance.request({
         url: "/api/QuanLyNguoiDung/XoaNguoiDung",
         method: "DELETE",
         params: {
-          TaiKhoan: user,
+          TaiKhoan: user.taiKhoan,
         },
       });
       const newData = [...data];
@@ -223,12 +227,13 @@ const User = ({ users }) => {
   const save = async (key) => {
     try {
       const row = await form.validateFields();
+      console.log(key);
       const newData = [...data];
       const index = newData.findIndex((item) => key === item.key);
       const user = {
         ...row,
         soDt: row.soDT,
-        maNhom: "GP00",
+        maNhom: "GP01",
         taiKhoan: newData[index].taiKhoan,
       };
       await postEdit(user);
@@ -360,7 +365,12 @@ const User = ({ users }) => {
       }),
     };
   });
+  useEffect(()=>{
+    fetchUsers()
+  },[])
   return (
+    <>
+    <Button onClick={()=>{navigate('/signup')}} className="btn-add"> <UserAddOutlined />Thêm Người Dùng</Button>
     <Form form={form} component={false}>
       <Table
         components={{
@@ -378,6 +388,8 @@ const User = ({ users }) => {
         }}
       />
     </Form>
+    </>
+    
   );
 };
 
