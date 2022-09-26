@@ -18,6 +18,7 @@ import EditMovie from "./Movies/EditMovie";
 import instance from "api/instance";
 
 import SignUp from "features/Authentication/SignUp/SignUp";
+import ShowTime from "./Movies/ShowTime";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -132,6 +133,10 @@ const Admin = (props) => {
 								element={<EditMovie />}
 							/>
 							<Route path="/movies/add" element={<AddMovie />} />
+							<Route
+								path="/movies/showtime/:id"
+								element={<ShowTime />}
+							/>
 							<Route
 								path="/signup"
 								element={<SignUp fetchUsers={fetchUsers} />}

@@ -21,7 +21,7 @@ import {
 	fetchMovieDetailAction,
 	updateMovieAction,
 } from "features/Admin/utils/adminAction";
-import { useLocation, useRouteMatch } from "react-router-dom";
+import { useLocation, useNavigate, useRouteMatch } from "react-router-dom";
 import moment from "moment";
 import { useHistory } from "react-router";
 
@@ -34,6 +34,7 @@ const schema = yup.object({
 function EditMovie() {
 	const [img, setImg] = useState("");
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const match = useLocation();
 	const index = match.pathname.lastIndexOf("/");
@@ -269,8 +270,27 @@ function EditMovie() {
 				</Form.Item>
 
 				<Form.Item label="Hành động">
-					<button type="submit" style={{ cursor: "pointer" }}>
+					<button
+						type="submit"
+						style={{
+							cursor: "pointer",
+							padding: "5px 10px",
+							border: "none",
+							background: "#00a8ff",
+							color: "#fff",
+						}}
+					>
 						Cập nhật
+					</button>
+					<button
+						style={{
+							padding: "3px 10px",
+							marginLeft: 20,
+							cursor: "pointer",
+						}}
+						onClick={() => navigate("/movies/manage")}
+					>
+						Trở về
 					</button>
 				</Form.Item>
 			</Form>
