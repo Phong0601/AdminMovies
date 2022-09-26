@@ -10,6 +10,7 @@ import AddMovie from "features/Admin/Movies/AddMovie";
 import EditMovie from "features/Admin/Movies/EditMovie";
 import SignIn from "features/Authentication/SignIn/SignIn";
 import instance from "api/instance";
+import SignUp from "features/Authentication/SignUp/SignUp";
 
 function App() {
 	const [getUser,setGetUser]= useState(null);
@@ -45,6 +46,7 @@ function App() {
 							element={<EditMovie />}
 						/>
 						<Route path="/*movies/add" element={<AddMovie />} />
+						<Route path="/*signup" element={<SignUp/>}></Route>
 					</Route>
 				</Routes>
 			</Router>

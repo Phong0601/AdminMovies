@@ -16,6 +16,7 @@ import ManageMovie from "./Movies/ManageMovie";
 import AddMovie from "./Movies/AddMovie";
 import EditMovie from "./Movies/EditMovie";
 import instance from "api/instance";
+import SignUp from "features/Authentication/SignUp/SignUp";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -48,14 +49,14 @@ const Admin = (props) => {
       const res = await instance.request({
         url: "/api/QuanLyNguoiDung/LayDanhSachNguoiDung",
         method: "GET",
-        MaNhom: "GP00",
+        MaNhom: "GP01",
       });
       setUsers(res.data.content);
+      console.log(res.data.content);
     } catch (error) {}
   };
 
   useEffect(() => {
-    // localStorage.setItem('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoicGhvbmcwNjAxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoicGhvbmcwNjAxQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJRdWFuVHJpIiwicGhvbmcwNjAxQGdtYWlsLmNvbSIsIkdQMDAiXSwibmJmIjoxNjY0MTEzMDA1LCJleHAiOjE2NjQxMTY2MDV9.QgRTTMD7nJRo8TT8eR_aXdv-THGMiIStEXsJWjpQxoI')
     fetchUsers();
   }, []);
   if (!users) return <Spin></Spin>;
@@ -71,7 +72,7 @@ const Admin = (props) => {
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
-        <div style={{display:'inline-block'}} className="logo">
+        <div style={{ display: "inline-block" }} className="logo">
           {login ? (
             <h1 style={{ color: "#fff" }}>
               Hi <UserOutlined /> , {login?.taiKhoan}
@@ -80,6 +81,7 @@ const Admin = (props) => {
         </div>
         <Menu
           onClick={({ key }) => {
+            
             navigate(key);
             if (key === "/signin") {
               localStorage.removeItem("token");
@@ -103,20 +105,22 @@ const Admin = (props) => {
             margin: "0 16px",
           }}
         >
-          <Routes>
-            <Route path="/users" element={<User users={users} />} />
-            <Route path="/" element={<Movies />} />
-            <Route path="/movies/manage" element={<ManageMovie />} />
-            <Route path="/movies/edit/:id" element={<EditMovie />} />
-            <Route path="/movies/add" element={<AddMovie />} />
-          </Routes>
           <div
             className="site-layout-background"
             style={{
               padding: 24,
               minHeight: 360,
             }}
-          ></div>
+          >
+            <Routes>
+              <Route path="/users" element={<User fetchUsers={fetchUsers} users={users} />} />
+              <Route path="/" element={<Movies />} />
+              <Route path="/movies/manage" element={<ManageMovie />} />
+              <Route path="/movies/edit/:id" element={<EditMovie />} />
+              <Route path="/movies/add" element={<AddMovie />} />
+              <Route path="/signup" element={<SignUp fetchUsers={fetchUsers} />}></Route>
+            </Routes>
+          </div>
         </Content>
         <Footer
           style={{
