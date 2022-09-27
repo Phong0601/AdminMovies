@@ -144,7 +144,7 @@ function ShowTime() {
 					span: 6,
 				}}
 				wrapperCol={{
-					span: 10,
+					span: 14,
 				}}
 				initialValues={{
 					remember: true,
@@ -195,12 +195,12 @@ function ShowTime() {
 					<InputNumber
 						name="giaVe"
 						min={75000}
-						max={200000}
+						max={400000}
 						onChange={onChangeInputNumber}
 						onBlur={formik.handleBlur}
 					/>
 					<span style={{ marginLeft: 20 }}>
-						*Giá vé tối thiểu là 75.000 VND và tối đa là 200000 VND
+						Giá vé tối thiểu là 75.000 VND và tối đa là 400.000 VND
 					</span>
 					{formik.touched.giaVe && formik.errors.giaVe && (
 						<p style={{ color: "red", margin: 0 }}>

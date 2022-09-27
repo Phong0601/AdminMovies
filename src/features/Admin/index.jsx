@@ -19,6 +19,7 @@ import EditMovie from "./Movies/EditMovie";
 import instance from "api/instance";
 
 import SignUp from "features/Authentication/SignUp/SignUp";
+import ShowTime from "./Movies/ShowTime";
 import { fetchUsersListAction } from "./utils/adminAction";
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -55,12 +56,12 @@ const Admin = (props) => {
 	// 			MaNhom: "GP01",
 	// 		});
 	// 		setUsers(res.data.content);
-			
+
 	// 	} catch (error) {}
 	// };
 
 	// useEffect(() => {
-		
+
 	// 	// fetchUsers();
 	// }, []);
 	// if (!users) return <Spin></Spin>;
@@ -76,12 +77,34 @@ const Admin = (props) => {
 				collapsed={collapsed}
 				onCollapse={(value) => setCollapsed(value)}
 			>
-				<div style={{ display: "inline-block" }} className="logo">
+				<div className="logo">
 					{login ? (
-						<h1 style={{ color: "#fff" }}>
-							Hi <UserOutlined /> , {login?.taiKhoan}
+						<div style={{ color: "#fff", textAlign: "center" }}>
+							<div
+								style={{
+									display: "inline-block",
+									border: "3px solid white",
+									borderRadius: "50%",
+								}}
+							>
+								<UserOutlined style={{ fontSize: 30 }} />
+							</div>
+							<div style={{ marginTop: 10, fontSize: 16 }}>
+								Hi, {login?.taiKhoan}
+							</div>
+						</div>
+					) : (
+						<h1
+							onClick={navigate("/signin")}
+							style={{
+								color: "#fff",
+								display: "inline-block",
+								cursor: "pointer",
+							}}
+						>
+							Bạn chưa đăng nhập !
 						</h1>
-					) : <h1 onClick={navigate('/signin')} style={{color: "#fff",display:'inline-block',cursor:'pointer'}}><UserSwitchOutlined  />Đăng Nhập <br/> Bé Ơi</h1>}
+					)}
 				</div>
 				<Menu
 					onClick={({ key }) => {
@@ -120,8 +143,8 @@ const Admin = (props) => {
 								path="/users"
 								element={
 									<User
-										// fetchUsers={fetchUsers}
-										// users={users}
+									// fetchUsers={fetchUsers}
+									// users={users}
 									/>
 								}
 							/>
@@ -136,10 +159,16 @@ const Admin = (props) => {
 							/>
 							<Route path="/movies/add" element={<AddMovie />} />
 							<Route
+								path="/movies/showtime/:id"
+								element={<ShowTime />}
+							/>
+							<Route
 								path="/signup"
-								element={<SignUp 
-									// fetchUsers={fetchUsers} 
-									/>}
+								element={
+									<SignUp
+									// fetchUsers={fetchUsers}
+									/>
+								}
 							></Route>
 						</Routes>
 					</div>

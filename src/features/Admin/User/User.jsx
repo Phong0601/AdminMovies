@@ -1,13 +1,13 @@
 import {
-  Form,
-  Input,
-  InputNumber,
-  Popconfirm,
-  Table,
-  Typography,
-  Button,
-  Space,
-  Spin,
+	Form,
+	Input,
+	InputNumber,
+	Popconfirm,
+	Table,
+	Typography,
+	Button,
+	Space,
+	Spin,
 } from "antd";
 import instance from "api/instance";
 import React, { useEffect, useState, useRef } from "react";
@@ -20,38 +20,38 @@ import { fetchUsersListAction } from "../utils/adminAction";
 import { useDispatch, useSelector } from "react-redux";
 
 const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
+	editing,
+	dataIndex,
+	title,
+	inputType,
+	record,
+	index,
+	children,
+	...restProps
 }) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
+	const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
+	return (
+		<td {...restProps}>
+			{editing ? (
+				<Form.Item
+					name={dataIndex}
+					style={{
+						margin: 0,
+					}}
+					rules={[
+						{
+							required: true,
+							message: `Please Input ${title}!`,
+						},
+					]}
+				>
+					{inputNode}
+				</Form.Item>
+			) : (
+				children
+			)}
+		</td>
+	);
 };
 const originData = [];
 const User = ({ users, fetchUsers }) => {
@@ -76,109 +76,118 @@ const User = ({ users, fetchUsers }) => {
   console.log(test);
   const isEditing = (record) => record.key === editingKey;
 
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
+	const handleSearch = (selectedKeys, confirm, dataIndex) => {
+		confirm();
+		setSearchText(selectedKeys[0]);
+		setSearchedColumn(dataIndex);
+	};
 
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
-  };
+	const handleReset = (clearFilters) => {
+		clearFilters();
+		setSearchText("");
+	};
 
-  //input search
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div
-        style={{
-          padding: 8,
-        }}
-      >
-        <Input
-          ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{
-            marginBottom: 8,
-            display: "block",
-          }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined
-        style={{
-          color: filtered ? "#1890ff" : undefined,
-        }}
-      />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{
-            backgroundColor: "#ffc069",
-            padding: 0,
-          }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
-  });
+	//input search
+	const getColumnSearchProps = (dataIndex) => ({
+		filterDropdown: ({
+			setSelectedKeys,
+			selectedKeys,
+			confirm,
+			clearFilters,
+		}) => (
+			<div
+				style={{
+					padding: 8,
+				}}
+			>
+				<Input
+					ref={searchInput}
+					placeholder={`Search ${dataIndex}`}
+					value={selectedKeys[0]}
+					onChange={(e) =>
+						setSelectedKeys(e.target.value ? [e.target.value] : [])
+					}
+					onPressEnter={() =>
+						handleSearch(selectedKeys, confirm, dataIndex)
+					}
+					style={{
+						marginBottom: 8,
+						display: "block",
+					}}
+				/>
+				<Space>
+					<Button
+						type="primary"
+						onClick={() =>
+							handleSearch(selectedKeys, confirm, dataIndex)
+						}
+						icon={<SearchOutlined />}
+						size="small"
+						style={{
+							width: 90,
+						}}
+					>
+						Search
+					</Button>
+					<Button
+						onClick={() =>
+							clearFilters && handleReset(clearFilters)
+						}
+						size="small"
+						style={{
+							width: 90,
+						}}
+					>
+						Reset
+					</Button>
+					<Button
+						type="link"
+						size="small"
+						onClick={() => {
+							confirm({
+								closeDropdown: false,
+							});
+							setSearchText(selectedKeys[0]);
+							setSearchedColumn(dataIndex);
+						}}
+					>
+						Filter
+					</Button>
+				</Space>
+			</div>
+		),
+		filterIcon: (filtered) => (
+			<SearchOutlined
+				style={{
+					color: filtered ? "#1890ff" : undefined,
+				}}
+			/>
+		),
+		onFilter: (value, record) =>
+			record[dataIndex]
+				.toString()
+				.toLowerCase()
+				.includes(value.toLowerCase()),
+		onFilterDropdownOpenChange: (visible) => {
+			if (visible) {
+				setTimeout(() => searchInput.current?.select(), 100);
+			}
+		},
+		render: (text) =>
+			searchedColumn === dataIndex ? (
+				<Highlighter
+					highlightStyle={{
+						backgroundColor: "#ffc069",
+						padding: 0,
+					}}
+					searchWords={[searchText]}
+					autoEscape
+					textToHighlight={text ? text.toString() : ""}
+				/>
+			) : (
+				text
+			),
+	});
 
   //call api Edit User
   const postEdit = async (user) => {
@@ -223,9 +232,9 @@ const User = ({ users, fetchUsers }) => {
     setEditingKey(record.key);
   };
 
-  const cancel = () => {
-    setEditingKey("");
-  };
+	const cancel = () => {
+		setEditingKey("");
+	};
 
   const save = async (key) => {
     try {
