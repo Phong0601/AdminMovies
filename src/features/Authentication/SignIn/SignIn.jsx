@@ -26,7 +26,7 @@ const SignIn = ({ setGetUser }) => {
 				localStorage.setItem("token", res.data.content.accessToken);
 				delete res.data.content.accessToken;
 				setGetUser(res.data.content);
-				navigate("/users");
+				navigate("/");
 				return;
 			}
 			return alert("Bạn Không Đủ Quyền Truy Cập");

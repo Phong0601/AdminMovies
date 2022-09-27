@@ -197,10 +197,19 @@ const User = ({ users, fetchUsers }) => {
         timer: 1500,
       });
       fetchUsersAction();
-    } catch (error) {}
+    } catch (error) {
+      Swal.fire({
+        title: error.response.data.content,
+        text: "Không Thể Sửa",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
   };
   //call api Delete User
   const deleteUsers = async (user) => {
+    console.log(user);
     try {
       const res = await instance.request({
         url: "/api/QuanLyNguoiDung/XoaNguoiDung",
