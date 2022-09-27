@@ -38,7 +38,6 @@ function App() {
 					/>
 					<Route path="/*" element={<Admin getUser={getUser} />}>
 						<Route path="/*users" element={<User />} />
-						<Route path="/*" element={<Movies />} />
 						<Route
 							path="/*movies/manage"
 							element={<ManageMovie />}

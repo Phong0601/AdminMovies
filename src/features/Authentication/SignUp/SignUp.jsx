@@ -11,7 +11,9 @@ import {
   Select,
 } from "antd";
 import instance from "api/instance";
+import { fetchUsersListAction } from "features/Admin/utils/adminAction";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./_signUp.scss";
 const { Option } = Select;
@@ -52,6 +54,7 @@ const SignUp = ({ fetchUsers }) => {
   const [loading, setLoading] = useState(false);
   const [contentError, setContentErro] = useState("");
   const navigate = useNavigate()
+  const ditpatch = useDispatch()
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
   };
@@ -78,7 +81,7 @@ const SignUp = ({ fetchUsers }) => {
       });
       setLoading(false);
       setContentErro("");
-      
+      // fetchUser();
 	  navigate('/users')
     } catch (error) {
       setLoading(false);
@@ -87,7 +90,9 @@ const SignUp = ({ fetchUsers }) => {
       setLoading(false);
     }
   };
-
+  const fetchUser = ()=>{
+    ditpatch(fetchUsersListAction())
+  }
   return (
     <Form
       {...formItemLayout}

@@ -20,6 +20,7 @@ import instance from "api/instance";
 
 import SignUp from "features/Authentication/SignUp/SignUp";
 import ShowTime from "./Movies/ShowTime";
+import { fetchUsersListAction } from "./utils/adminAction";
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -47,22 +48,23 @@ const Admin = (props) => {
 	const [collapsed, setCollapsed] = useState(false);
 	const [users, setUsers] = useState(null);
 	const login = props.getUser;
-	const fetchUsers = async () => {
-		try {
-			const res = await instance.request({
-				url: "/api/QuanLyNguoiDung/LayDanhSachNguoiDung",
-				method: "GET",
-				MaNhom: "GP01",
-			});
-			setUsers(res.data.content);
-			console.log(res.data.content);
-		} catch (error) {}
-	};
+	// const fetchUsers = async () => {
+	// 	try {
+	// 		const res = await instance.request({
+	// 			url: "/api/QuanLyNguoiDung/LayDanhSachNguoiDung",
+	// 			method: "GET",
+	// 			MaNhom: "GP01",
+	// 		});
+	// 		setUsers(res.data.content);
 
-	useEffect(() => {
-		fetchUsers();
-	}, []);
-	if (!users) return <Spin></Spin>;
+	// 	} catch (error) {}
+	// };
+
+	// useEffect(() => {
+
+	// 	// fetchUsers();
+	// }, []);
+	// if (!users) return <Spin></Spin>;
 	return (
 		<Layout
 			style={{
@@ -75,12 +77,34 @@ const Admin = (props) => {
 				collapsed={collapsed}
 				onCollapse={(value) => setCollapsed(value)}
 			>
-				<div style={{ display: "inline-block" }} className="logo">
+				<div className="logo">
 					{login ? (
-						<h1 style={{ color: "#fff" }}>
-							Hi <UserOutlined /> , {login?.taiKhoan}
+						<div style={{ color: "#fff", textAlign: "center" }}>
+							<div
+								style={{
+									display: "inline-block",
+									border: "3px solid white",
+									borderRadius: "50%",
+								}}
+							>
+								<UserOutlined style={{ fontSize: 30 }} />
+							</div>
+							<div style={{ marginTop: 10, fontSize: 16 }}>
+								Hi, {login?.taiKhoan}
+							</div>
+						</div>
+					) : (
+						<h1
+							onClick={navigate("/signin")}
+							style={{
+								color: "#fff",
+								display: "inline-block",
+								cursor: "pointer",
+							}}
+						>
+							Bạn chưa đăng nhập !
 						</h1>
-					) : <h1 onClick={navigate('/signin')} style={{color: "#fff",display:'inline-block',cursor:'pointer'}}><UserSwitchOutlined  />Đăng Nhập <br/> Bé Ơi</h1>}
+					)}
 				</div>
 				<Menu
 					onClick={({ key }) => {
@@ -119,8 +143,8 @@ const Admin = (props) => {
 								path="/users"
 								element={
 									<User
-										fetchUsers={fetchUsers}
-										users={users}
+									// fetchUsers={fetchUsers}
+									// users={users}
 									/>
 								}
 							/>
@@ -140,7 +164,11 @@ const Admin = (props) => {
 							/>
 							<Route
 								path="/signup"
-								element={<SignUp fetchUsers={fetchUsers} />}
+								element={
+									<SignUp
+									// fetchUsers={fetchUsers}
+									/>
+								}
 							></Route>
 						</Routes>
 					</div>
