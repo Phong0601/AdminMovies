@@ -32,39 +32,22 @@ function getItem(label, key, icon, children) {
 	};
 }
 
-const items = [
-	getItem("Movies", "/movies", <DesktopOutlined />, [
-		getItem("Manage movie", "/movies/manage"),
-		getItem("Add movie", "/movies/add"),
-	]),
-	getItem("User", "/users", <UserOutlined />),
-	getItem("Đăng Xuất", "/signin", <LoginOutlined />),
-];
-//123@admin
-//123123
+
+
 const Admin = (props) => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const [collapsed, setCollapsed] = useState(false);
 	const [users, setUsers] = useState(null);
 	const login = props.getUser;
-	// const fetchUsers = async () => {
-	// 	try {
-	// 		const res = await instance.request({
-	// 			url: "/api/QuanLyNguoiDung/LayDanhSachNguoiDung",
-	// 			method: "GET",
-	// 			MaNhom: "GP01",
-	// 		});
-	// 		setUsers(res.data.content);
-
-	// 	} catch (error) {}
-	// };
-
-	// useEffect(() => {
-
-	// 	// fetchUsers();
-	// }, []);
-	// if (!users) return <Spin></Spin>;
+	const items = [
+		getItem("Movies", "/movies", <DesktopOutlined />, [
+			getItem("Manage movie", "/movies/manage"),
+			getItem("Add movie", "/movies/add"),
+		]),
+		getItem("User", "/users", <UserOutlined />),
+		getItem("Đăng Xuất", "/signin", <LoginOutlined />),
+	];
 	return (
 		<Layout
 			style={{
@@ -99,10 +82,10 @@ const Admin = (props) => {
 							style={{
 								color: "#fff",
 								display: "inline-block",
-								cursor: "pointer",
+								
 							}}
 						>
-							Bạn chưa đăng nhập !
+							Chọn Icon Bất Kì <br/> Để Đăng Nhập
 						</h1>
 					)}
 				</div>
