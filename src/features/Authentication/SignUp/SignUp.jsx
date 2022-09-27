@@ -49,12 +49,12 @@ const tailFormItemLayout = {
   },
 };
 
-const SignUp = ({ fetchUsers }) => {
+const SignUp = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [contentError, setContentErro] = useState("");
-  const navigate = useNavigate()
-  const ditpatch = useDispatch()
+  const navigate = useNavigate();
+  const ditpatch = useDispatch();
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
   };
@@ -79,10 +79,11 @@ const SignUp = ({ fetchUsers }) => {
         method: "POST",
         data: user,
       });
+      fetchUser();
       setLoading(false);
       setContentErro("");
-      // fetchUser();
-	  navigate('/users')
+
+      navigate("/users");
     } catch (error) {
       setLoading(false);
       setContentErro(error.response.data.content);
@@ -90,9 +91,9 @@ const SignUp = ({ fetchUsers }) => {
       setLoading(false);
     }
   };
-  const fetchUser = ()=>{
-    ditpatch(fetchUsersListAction())
-  }
+  const fetchUser = () => {
+    ditpatch(fetchUsersListAction());
+  };
   return (
     <Form
       {...formItemLayout}

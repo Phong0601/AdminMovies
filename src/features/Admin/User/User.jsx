@@ -18,9 +18,6 @@ import Highlighter from "react-highlight-words";
 import { useNavigate } from "react-router-dom";
 import { fetchUsersListAction } from "../utils/adminAction";
 import { useDispatch, useSelector } from "react-redux";
-import useSelection from "antd/lib/table/hooks/useSelection";
-
-const originData = [];
 
 const EditableCell = ({
   editing,
@@ -56,8 +53,8 @@ const EditableCell = ({
     </td>
   );
 };
-
-const User = ({ users,fetchUsers }) => {
+const originData = [];
+const User = ({ users, fetchUsers }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
@@ -65,14 +62,18 @@ const User = ({ users,fetchUsers }) => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
-  const usersList = useSelector(state=>state.admin.usersList)
-  const navigate= useNavigate()
+  const usersList = useSelector((state) => state.admin.usersList);
+  const navigate = useNavigate();
 
-  
   usersList?.map((user, index) => {
     originData.push({ ...user, key: index });
   });
-
+  const test = usersList?.map((user, index) => ({
+    ...user,
+    key: index,
+    maNhom: "GP01",
+  }));
+  console.log(test);
   const isEditing = (record) => record.key === editingKey;
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -181,14 +182,13 @@ const User = ({ users,fetchUsers }) => {
 
   //call api Edit User
   const postEdit = async (user) => {
-    
     try {
       const res = await instance.request({
         url: "/api/QuanLyNguoiDung/CapNhatThongTinNguoiDung",
         method: "POST",
         data: user,
       });
-
+      fetchUsersAction()
       console.log("success");
     } catch (error) {
       console.log(error);
@@ -196,23 +196,18 @@ const User = ({ users,fetchUsers }) => {
   };
   //call api Delete User
   const deleteUsers = async (user) => {
-    console.log(users);
     try {
       const res = await instance.request({
         url: "/api/QuanLyNguoiDung/XoaNguoiDung",
         method: "DELETE",
         params: {
-          TaiKhoan: user.taiKhoan,
+          TaiKhoan: user,
         },
       });
-      const newData = [...data];
-      const index = newData.findIndex((item) => item.key === user.key);
-      if (index > -1) {
-        newData.splice(index, 1);
-        setData(newData);
-      }
+      fetchUsersAction()
     } catch (error) {
-      return alert("tài khoản này đã đặt phim");
+      
+       
     }
   };
   const edit = (record) => {
@@ -235,37 +230,20 @@ const User = ({ users,fetchUsers }) => {
   const save = async (key) => {
     try {
       const row = await form.validateFields();
-      console.log(key);
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
-      const user = {
-        ...row,
-        soDt: row.soDT,
-        maNhom: "GP01",
-        taiKhoan: newData[index].taiKhoan,
-      };
-      await postEdit(user);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setData(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey("");
-      }
+      const user = { ...test[key], ...row };
+      postEdit(user);
+      setEditingKey("");
     } catch (errInfo) {
       console.log("Validate Failed:", errInfo);
     }
   };
-  const fetchUsersAction = ()=>{
-    dispatch(fetchUsersListAction())
-  } 
-  useEffect (()=>{
-    fetchUsersAction()
-  },[])
-  if(!usersList) return <Spin></Spin>
+  const fetchUsersAction = () => {
+    dispatch(fetchUsersListAction());
+  };
+  useEffect(() => {
+    fetchUsersAction();
+  }, []);
+  if (!usersList) return <Spin></Spin>;
   const columns = [
     {
       title: "Tài Khoản",
@@ -304,7 +282,7 @@ const User = ({ users,fetchUsers }) => {
     {
       title: "Phân Loại",
       dataIndex: "maLoaiNguoiDung",
-      
+
       filters: [
         {
           text: "Quản Trị",
@@ -350,10 +328,9 @@ const User = ({ users,fetchUsers }) => {
               Edit
             </Typography.Link>
             <Popconfirm
-              
               title="Sure to Delete?"
               onConfirm={() => {
-                deleteUsers(record);
+                deleteUsers(record.taiKhoan);
               }}
             >
               <a>Delete</a>
@@ -384,26 +361,34 @@ const User = ({ users,fetchUsers }) => {
   // },[])
   return (
     <>
-    <Button onClick={()=>{navigate('/signup')}} className="btn-add"> <UserAddOutlined />Thêm Người Dùng</Button>
-    <Form form={form} component={false}>
-      <Table
-        components={{
-          body: {
-            cell: EditableCell,
-          },
+      <Button
+        onClick={() => {
+          navigate("/signup");
         }}
-        bordered
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={{
-          style: { textAlign: "center" },
-          onChange: cancel,
-        }}
-      />
-    </Form>
+        className="btn-add"
+      >
+        {" "}
+        <UserAddOutlined />
+        Thêm Người Dùng
+      </Button>
+      <Form form={form} component={false}>
+        <Table
+          components={{
+            body: {
+              cell: EditableCell,
+            },
+          }}
+          bordered
+          dataSource={test}
+          columns={mergedColumns}
+          rowClassName="editable-row"
+          pagination={{
+            style: { textAlign: "center" },
+            onChange: cancel,
+          }}
+        />
+      </Form>
     </>
-    
   );
 };
 
