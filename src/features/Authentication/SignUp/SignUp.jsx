@@ -15,6 +15,7 @@ import { fetchUsersListAction } from "features/Admin/utils/adminAction";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import "./_signUp.scss";
 const { Option } = Select;
 
@@ -79,14 +80,26 @@ const SignUp = () => {
         method: "POST",
         data: user,
       });
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Thêm Thành Công !",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       fetchUser();
       setLoading(false);
-      setContentErro("");
 
       navigate("/users");
     } catch (error) {
       setLoading(false);
-      setContentErro(error.response.data.content);
+      Swal.fire({
+        title: error.response.data.content,
+        text: "Chưa Thêm Được",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } finally {
       setLoading(false);
     }
@@ -247,7 +260,6 @@ const SignUp = () => {
         <Button loading={loading} type="primary" htmlType="submit">
           Register
         </Button>
-        {contentError ? <h3 style={{ color: "red" }}>{contentError}</h3> : null}
       </Form.Item>
     </Form>
   );
